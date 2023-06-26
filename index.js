@@ -1,1 +1,1 @@
-module.exports = require('./lib/Algorithm');
+module.exports = require('./src/egreedy');

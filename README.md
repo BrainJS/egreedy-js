@@ -13,7 +13,9 @@ This implementation is based on [<em>Bandit Algorithms for Website Optimization<
 ### Prerequisites
 
 - Node.js 6.x+ ([LTS track](https://github.com/nodejs/LTS#lts-schedule1))
-- npm
+- a package manager of your choice
+
+NOTE: Now typescript ready!
 
 ### Installing
 
@@ -25,17 +27,17 @@ npm install egreedy --save
 
 ### Caveat emptor
 
-This implementation often encounters extended floating point numbers. Arm selection is therefore subject to JavaScript's floating point precision limitations. For general information about floating point issues see the [floating point guide](http://floating-point-gui.de).
+This implementation (and pretty much any binary computer language) often encounters extended floating point numbers. Arm selection is therefore subject to JavaScript's floating point precision limitations. For general information about floating point issues see the [floating point guide](http://floating-point-gui.de).
 
 
 ## Usage
 
 1. Create an optimizer with `3` arms and epsilon `0.25`:
 
-    ```js
-    const Algorithm = require('egreedy');
+    ```ts
+    import { Egreedy } from './egreedy';
 
-    const algorithm = new Algorithm({
+    const algorithm = new Egreedy({
       arms: 3,
       epsilon: 0.25
     });
@@ -43,7 +45,7 @@ This implementation often encounters extended floating point numbers. Arm select
 
 2. Select an arm (for exploration or exploitation, according to the algorithm):
 
-    ```js
+    ```ts
     algorithm.select().then((arm) => {
       // do something based on the chosen arm
     });
@@ -51,14 +53,14 @@ This implementation often encounters extended floating point numbers. Arm select
 
 3. Report the reward earned from a chosen arm:
 
-    ```js
+    ```ts
     algorithm.reward(arm, value);
     ```
 
 
 ## API
 
-### `Algorithm(config)`
+### `Egreedy(config)`
 
 Create a new optimization algorithm.
 
@@ -71,7 +73,7 @@ The `config` object supports two optional parameters:
 - `arms` (`Number`, Integer): The number of arms over which the optimization will operate; defaults to `2`
 - `epsilon` (`Number`, Float, `0` to `1`):  lower leads to more exploration (and less exploitation); defaults to `0.5`
 
-Alternatively, the `state` object resolved from [`Algorithm#serialize`](https://github.com/kurttheviking/egreedy-js#algorithmserialize) can be passed as `config`.
+Alternatively, the `state` object resolved from [`Egreedy#serialize`](https://github.com/kurttheviking/egreedy-js#algorithmserialize) can be passed as `config`.
 
 #### Returns
 
@@ -79,9 +81,9 @@ An instance of the egreedy optimization algorithm.
 
 #### Example
 
-```js
-const Algorithm = require('egreedy');
-const algorithm = new Algorithm();
+```ts
+import { Egreedy } from 'egreedy';
+const algorithm = new Egreedy();
 
 assert.equal(algorithm.arms, 2);
 assert.equal(algorithm.epsilon, 0.5);
@@ -89,15 +91,15 @@ assert.equal(algorithm.epsilon, 0.5);
 
 Or, with a passed `config`:
 
-```js
-const Algorithm = require('egreedy');
-const algorithm = new Algorithm({ arms: 4, epsilon: 0.75 });
+```ts
+import { Egreedy } from 'egreedy';
+const algorithm = new Egreedy({ arms: 4, epsilon: 0.75 });
 
 assert.equal(algorithm.arms, 4);
 assert.equal(algorithm.epsilon, 0.75);
 ```
 
-### `Algorithm#select()`
+### `Egreedy#select()`
 
 Choose an arm to play, according to the specified bandit algorithm.
 
@@ -111,20 +113,20 @@ A `Promise` that resolves to a `Number` corresponding to the associated arm inde
 
 #### Example
 
-```js
-const Algorithm = require('egreedy');
-const algorithm = new Algorithm();
+```ts
+import { Egreedy } from 'egreedy';
+const algorithm = new Egreedy();
 
 algorithm.select().then(arm => console.log(arm));
 ```
 
-### `Algorithm#reward(arm, reward)`
+### `Egreedy#reward(arm, reward)`
 
 Inform the algorithm about the payoff earned from a given arm.
 
 #### Arguments
 
-- `arm` (`Number`, Integer): the arm index (provided from `Algorithm#select()`)
+- `arm` (`Number`, Integer): the arm index (provided from `Egreedy#select()`)
 - `reward` (`Number`): the observed reward value (which can be 0 to indicate no reward)
 
 #### Returns
@@ -133,14 +135,14 @@ A `Promise` that resolves to an updated instance of the algorithm. (The original
 
 #### Example
 
-```js
-const Algorithm = require('egreedy');
-const algorithm = new Algorithm();
+```ts
+import { Egreedy } from 'egreedy';
+const algorithm = new Egreedy();
 
 algorithm.reward(0, 1).then(updatedAlgorithm => console.log(updatedAlgorithm));
 ```
 
-### `Algorithm#serialize()`
+### `Egreedy#serialize()`
 
 Obtain a plain object representing the internal state of the algorithm.
 
@@ -154,9 +156,9 @@ A `Promise` that resolves to a stringify-able `Object` with parameters needed to
 
 #### Example
 
-```js
-const Algorithm = require('egreedy');
-const algorithm = new Algorithm();
+```ts
+import { Egreedy } from 'egreedy';
+const algorithm = new Egreedy();
 
 algorithm.serialize().then(state => console.log(state));
 ```
@@ -196,4 +198,4 @@ Or, to run the test suite and view test coverage:
 npm run coverage
 ```
 
-**Note:** Tests against stochastic methods (e.g. `Algorithm#select`) are inherently tricky to test with deterministic assertions. The approach here is to iterate across a semi-random set of conditions to verify that each run produces valid output. As a result, each test suite run encounters slightly different execution state. In the future, the test suite should be expanded to include a more robust test of the distribution's properties &ndash; though because of the number of runs required, should be triggered with an optional flag.
+**Note:** Tests against stochastic methods (e.g. `Egreedy#select`) are inherently tricky to test with deterministic assertions. The approach here is to iterate across a semi-random set of conditions to verify that each run produces valid output. As a result, each test suite run encounters slightly different execution state. In the future, the test suite should be expanded to include a more robust test of the distribution's properties &ndash; though because of the number of runs required, should be triggered with an optional flag.

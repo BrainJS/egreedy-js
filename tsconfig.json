@@ -15,6 +15,7 @@
     "noImplicitAny":true,
     "noImplicitReturns":false,
     "noImplicitUseStrict":false,
+    "esModuleInterop": true,
     "outDir":"out/",
     "baseUrl":"src/",
     "listFiles":false,

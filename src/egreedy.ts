@@ -2,27 +2,27 @@ import { MersenneTwister19937, Random } from 'random-js';
 
 const random = new Random(MersenneTwister19937.autoSeed());
 
-export interface IEGreedyOptions {
+export interface EgreedyOptions {
   arms?: number | string;
   epsilon?: number | string;
   counts?: number[];
   values?: number[];
 }
 
-export interface IEGreedySerialized {
+export interface EgreedySerialized {
   arms: number;
   epsilon: number;
   counts: number[];
   values: number[];
 }
 
-export class EGreedy implements IEGreedySerialized {
+export class Egreedy implements EgreedySerialized {
   arms: number;
   epsilon: number;
   counts: number[];
   values: number[];
 
-  constructor(options: IEGreedyOptions = {}) {
+  constructor(options: EgreedyOptions = {}) {
     this.arms = options.arms === undefined ? 2 : parseInt(options.arms as string, 10);
     this.epsilon = options.epsilon === undefined ? 0.5 : parseFloat(options.epsilon as string);
 
@@ -34,7 +34,7 @@ export class EGreedy implements IEGreedySerialized {
       throw new TypeError('invalid epsilon: cannot be greater than 1');
     }
 
-    const serialized = options as IEGreedySerialized;
+    const serialized = options as EgreedySerialized;
     if (typeof serialized.counts !== 'undefined' && typeof serialized.values !== 'undefined') {
       if (!Array.isArray(options.counts)) {
         throw new TypeError('counts must be an array');
@@ -91,11 +91,11 @@ export class EGreedy implements IEGreedySerialized {
     return this.values.indexOf(Math.max.apply(null, this.values));
   }
 
-  async serialize(): Promise<IEGreedySerialized> {
+  async serialize(): Promise<EgreedySerialized> {
     return this.serializeSync();
   }
 
-  serializeSync(): IEGreedySerialized {
+  serializeSync(): EgreedySerialized {
     return {
       arms: this.arms,
       epsilon: this.epsilon,

@@ -13,7 +13,9 @@ This implementation is based on [<em>Bandit Algorithms for Website Optimization<
 ### Prerequisites
 
 - Node.js 6.x+ ([LTS track](https://github.com/nodejs/LTS#lts-schedule1))
-- npm
+- a package manager of your choice
+
+NOTE: Now typescript ready!
 
 ### Installing
 
@@ -25,15 +27,15 @@ npm install egreedy --save
 
 ### Caveat emptor
 
-This implementation often encounters extended floating point numbers. Arm selection is therefore subject to JavaScript's floating point precision limitations. For general information about floating point issues see the [floating point guide](http://floating-point-gui.de).
+This implementation (and pretty much any binary computer language) often encounters extended floating point numbers. Arm selection is therefore subject to JavaScript's floating point precision limitations. For general information about floating point issues see the [floating point guide](http://floating-point-gui.de).
 
 
 ## Usage
 
 1. Create an optimizer with `3` arms and epsilon `0.25`:
 
-    ```js
-    const Egreedy = require('egreedy');
+    ```ts
+    import { Egreedy } from './egreedy';
 
     const algorithm = new Egreedy({
       arms: 3,
@@ -43,7 +45,7 @@ This implementation often encounters extended floating point numbers. Arm select
 
 2. Select an arm (for exploration or exploitation, according to the algorithm):
 
-    ```js
+    ```ts
     algorithm.select().then((arm) => {
       // do something based on the chosen arm
     });
@@ -51,7 +53,7 @@ This implementation often encounters extended floating point numbers. Arm select
 
 3. Report the reward earned from a chosen arm:
 
-    ```js
+    ```ts
     algorithm.reward(arm, value);
     ```
 
@@ -79,8 +81,8 @@ An instance of the egreedy optimization algorithm.
 
 #### Example
 
-```js
-const Egreedy = require('egreedy');
+```ts
+import { Egreedy } from 'egreedy';
 const algorithm = new Egreedy();
 
 assert.equal(algorithm.arms, 2);
@@ -89,8 +91,8 @@ assert.equal(algorithm.epsilon, 0.5);
 
 Or, with a passed `config`:
 
-```js
-const Egreedy = require('egreedy');
+```ts
+import { Egreedy } from 'egreedy';
 const algorithm = new Egreedy({ arms: 4, epsilon: 0.75 });
 
 assert.equal(algorithm.arms, 4);
@@ -111,8 +113,8 @@ A `Promise` that resolves to a `Number` corresponding to the associated arm inde
 
 #### Example
 
-```js
-const Egreedy = require('egreedy');
+```ts
+import { Egreedy } from 'egreedy';
 const algorithm = new Egreedy();
 
 algorithm.select().then(arm => console.log(arm));
@@ -133,8 +135,8 @@ A `Promise` that resolves to an updated instance of the algorithm. (The original
 
 #### Example
 
-```js
-const Egreedy = require('egreedy');
+```ts
+import { Egreedy } from 'egreedy';
 const algorithm = new Egreedy();
 
 algorithm.reward(0, 1).then(updatedAlgorithm => console.log(updatedAlgorithm));
@@ -154,8 +156,8 @@ A `Promise` that resolves to a stringify-able `Object` with parameters needed to
 
 #### Example
 
-```js
-const Egreedy = require('egreedy');
+```ts
+import { Egreedy } from 'egreedy';
 const algorithm = new Egreedy();
 
 algorithm.serialize().then(state => console.log(state));
